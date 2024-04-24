@@ -1,4 +1,4 @@
-public abstract class Producte {
+public abstract class Producte implements Comparable<Producte> {
 
     String nom;
     float preu;
@@ -28,5 +28,11 @@ public abstract class Producte {
     @Override
     public String toString() {
         return nom + " - Preu: " + preu + "€";
+    }
+
+    @Override
+    public int compareTo(Producte altreProducte) {
+        // Comparem els preus dels productes
+        return Float.compare(this.preu, altreProducte.preu);
     }
 }

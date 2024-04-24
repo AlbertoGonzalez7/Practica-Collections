@@ -17,14 +17,25 @@ public class Supermercat {
 
     public void afegirProducte(Producte producte, int unitats) {
         if (carroCompra.size() < MAX_PRODUCTES) {
-            carroCompra.add(producte); // Si no em arribat a 100 productes, podem afegir un producte.
             int codiBarres = producte.getCodiBarres();
-            if (unitatsPerProducte.containsKey(codiBarres)) {
-                unitatsPerProducte.put(codiBarres, unitatsPerProducte.get(codiBarres) + unitats);
-            } else {
-                unitatsPerProducte.put(codiBarres, unitats);
+            boolean existeix = false;
+            for (Producte p : carroCompra) {
+                if (p.getCodiBarres() == codiBarres) {
+                    existeix = true;
+                    break;
+                }
             }
-            System.out.println("Producte afegit al carro de la compra.");
+            if (existeix) {
+                System.out.println("Ja hi ha un producte amb el mateix codi de barres al carro.");
+            } else {
+                carroCompra.add(producte); // Agregamos el producto al carro de la compra.
+                if (unitatsPerProducte.containsKey(codiBarres)) {
+                    unitatsPerProducte.put(codiBarres, unitatsPerProducte.get(codiBarres) + unitats);
+                } else {
+                    unitatsPerProducte.put(codiBarres, unitats);
+                }
+                System.out.println("Producte afegit al carro de la compra.");
+            }
         } else {
             System.out.println("El carro de la compra està ple. No es poden afegir més productes.");
         }
