@@ -22,7 +22,6 @@ public class Supermercat {
             for (Producte p : carroCompra) {
                 if (p.getCodiBarres() == codiBarres) {
                     existeix = true;
-                    break;
                 }
             }
             if (existeix) {
@@ -153,10 +152,24 @@ public class Supermercat {
 
     // Opció Producte, preguntem nom, preu, codi de barres, data caducitat i la quantitat.
     private void afegirProducteAlimentacio(Scanner scanner) {
+        scanner.nextLine();
         System.out.print("Introdueix el nom del producte: ");
-        String nom = scanner.next();
+        String nom = scanner.nextLine();
+
         System.out.print("Introdueix el preu del producte: ");
-        float preu = scanner.nextFloat();
+        float preu = 0;
+        boolean preuValid = false;
+        while (!preuValid) {
+            try {
+                preu = scanner.nextFloat();
+                preuValid = true;
+            } catch (Exception e) {
+                System.out.println("Introdueix un valor numèric vàlid per al preu del producte.");
+                scanner.nextLine();
+            }
+        }
+        scanner.nextLine();
+
         System.out.print("Introdueix el codi de barres: ");
         int codiBarres = scanner.nextInt();
         System.out.print("Introdueix la data de caducitat (format YYYY-MM-DD): ");
@@ -170,10 +183,25 @@ public class Supermercat {
 
     // Opció Textil, preguntem nom, preu, codi de barres, composició i la quantitat.
     private void afegirProducteTextil(Scanner scanner) {
+        scanner.nextLine();
         System.out.print("Introdueix el nom del producte: ");
-        String nom = scanner.next();
+        String nom = scanner.nextLine();
+
         System.out.print("Introdueix el preu del producte: ");
-        float preu = scanner.nextFloat();
+        float preu = 0;
+        boolean preuValid = false;
+        while (!preuValid) {
+            try {
+                preu = scanner.nextFloat();
+                preuValid = true;
+            } catch (Exception e) {
+                System.out.println("Introdueix un valor numèric vàlid per al preu del producte.");
+                scanner.nextLine();
+            }
+        }
+
+        scanner.nextLine();
+
         System.out.print("Introdueix el codi de barres: ");
         int codiBarres = scanner.nextInt();
         System.out.print("Introdueix la composició tèxtil: ");
@@ -186,10 +214,25 @@ public class Supermercat {
 
     // Opció Electronica, preguntem nom, preu, codi de barres, dies garantia i la quantitat.
     private void afegirProducteElectronica(Scanner scanner) {
+        scanner.nextLine();
         System.out.print("Introdueix el nom del producte: ");
-        String nom = scanner.next();
+        String nom = scanner.nextLine();
+
         System.out.print("Introdueix el preu del producte: ");
-        float preu = scanner.nextFloat();
+        float preu = 0;
+        boolean preuValid = false;
+        while (!preuValid) {
+            try {
+                preu = scanner.nextFloat();
+                preuValid = true;
+            } catch (Exception e) {
+                System.out.println("Introdueix un valor numèric vàlid per al preu del producte.");
+                scanner.nextLine();
+            }
+        }
+
+        scanner.nextLine();
+
         System.out.print("Introdueix el codi de barres: ");
         int codiBarres = scanner.nextInt();
         System.out.print("Introdueix el nombre de dies de garantia: ");
