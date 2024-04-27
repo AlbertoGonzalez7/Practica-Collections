@@ -1,3 +1,4 @@
+import java.util.Comparator;
 public class Electronica extends Producte{
 
     int dies_garantia;
@@ -7,6 +8,9 @@ public class Electronica extends Producte{
         this.dies_garantia = dies_garantia;
     }
 
+    public int getDiesGarantia() {
+        return dies_garantia;
+    }
     @Override
     public double calcularPreuTotal() {
         //Calculem el preu segons els dies que hi ha de garantia.
@@ -17,5 +21,10 @@ public class Electronica extends Producte{
     @Override
     public String toString() {
         return super.toString() + " - Dies garantia: " + dies_garantia;
+    }
+
+    // Comparator para ordenar por días de garantía
+    public static Comparator<Electronica> compararPorDiasGarantia() {
+        return Comparator.comparingInt(Electronica::getDiesGarantia);
     }
 }
