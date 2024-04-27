@@ -3,14 +3,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeSet;
+import java.util.Comparator;
 
 public class Supermercat {
+    private TreeSet<Textil> productesTextils;
     private ArrayList<Producte> carroCompra;
     private Map<Integer, Integer> unitatsPerProducte;
     private static final int MAX_PRODUCTES = 100; // Quantitat màxima de productes
     private static final float IVA = 0.21f; // Iva del 21%
 
     public Supermercat() {
+        productesTextils = new TreeSet<>(new Comparator<Textil>() {
+            @Override
+            public int compare(Textil t1, Textil t2) {
+                return t2.getComposicioTextil().compareTo(t1.getComposicioTextil());
+            }
+        });
         carroCompra = new ArrayList<>();
         unitatsPerProducte = new HashMap<>();
     }
@@ -210,6 +219,8 @@ public class Supermercat {
         int unitats = scanner.nextInt();
         Textil textil = new Textil(nom, preu, codiBarres, composicioTextil);
         afegirProducte(textil, unitats);
+
+        productesTextils.add(textil);
     }
 
     // Opció Electronica, preguntem nom, preu, codi de barres, dies garantia i la quantitat.
