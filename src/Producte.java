@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+
 public abstract class Producte implements Comparable<Producte> {
 
     String nom;
@@ -18,6 +20,10 @@ public abstract class Producte implements Comparable<Producte> {
 
     public float getPreu() {
         return preu;
+    }
+
+    public void setPreu(float preu) {
+        this.preu = preu;
     }
 
     public int getCodiBarres() {

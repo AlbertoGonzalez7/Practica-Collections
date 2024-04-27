@@ -6,6 +6,11 @@ import java.util.Scanner;
 import java.util.TreeSet;
 import java.util.Comparator;
 import java.time.format.DateTimeFormatter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class Supermercat {
     private TreeSet<Textil> productesTextils;
@@ -51,6 +56,7 @@ public class Supermercat {
     }
 
     public void passarPerCaixa() {
+
         System.out.println("------ TICKET DE COMPRA ------");
         System.out.println("Data de la compra: " + LocalDate.now());
         System.out.println("Nom del supermercat: SAPAMERCAT");
@@ -188,6 +194,11 @@ public class Supermercat {
         System.out.print("Introdueix el nom del producte: ");
         String nom = scanner.nextLine();
 
+        if (nom.length() > 15) {
+            System.out.println("El nom del producte no pot tenir més de 15 caràcters.");
+            return;
+        }
+
         System.out.print("Introdueix el preu del producte: ");
         float preu = 0;
         boolean preuValid = false;
@@ -227,6 +238,11 @@ public class Supermercat {
         System.out.print("Introdueix el nom del producte: ");
         String nom = scanner.nextLine();
 
+        if (nom.length() > 15) {
+            System.out.println("Error: El nom del producte no pot superar els 15 caràcters.");
+            return;
+        }
+
         System.out.print("Introdueix el preu del producte: ");
         float preu = 0;
         boolean preuValid = false;
@@ -257,6 +273,7 @@ public class Supermercat {
             System.out.println("Error: Introdueix un número vàlid per al codi de barres.");
             scanner.next(); // Netegem el buffer del scanner
         }
+        comprovarActualitzacioPreusTextils();
     }
 
     // Opció Electronica, preguntem nom, preu, codi de barres, dies garantia i la quantitat.
@@ -264,6 +281,11 @@ public class Supermercat {
         scanner.nextLine();
         System.out.print("Introdueix el nom del producte: ");
         String nom = scanner.nextLine();
+
+        if (nom.length() > 15) {
+            System.out.println("Error: El nom del producte no pot superar els 15 caràcters.");
+            return;
+        }
 
         System.out.print("Introdueix el preu del producte: ");
         float preu = 0;
@@ -305,6 +327,58 @@ public class Supermercat {
 
         if (!trobat) {
             System.out.println("No s'ha trobat cap producte amb el codi de barres " + codiBarres);
+        }
+    }
+
+    // APARTAT: COMPROVAR FICHER DE PREUS TEXTILS
+    public void comprovarActualitzacioPreusTextils() {
+        File file = new File("./src/updates/UpdateTextilPrices.dat");
+        if (file.exists()) {
+            try (Scanner scanner = new Scanner(file)) {
+                while (scanner.hasNextLine()) {
+                    String line = scanner.nextLine();
+                    String[] parts = line.split(",");
+                    if (parts.length == 2) {
+                        try {
+                            int codiBarres = Integer.parseInt(parts[0]);
+                            float nouPreu = Float.parseFloat(parts[1]);
+                            // Actualitzem el preu del textil si el trobem al fitxer.
+                            for (Producte producte : carroCompra) {
+                                if (producte instanceof Textil && producte.getCodiBarres() == codiBarres) {
+                                    ((Textil) producte).setPreu(nouPreu);
+                                    System.out.println("Preus de tèxtil actualitzats correctament.");
+                                }
+                            }
+                        } catch (NumberFormatException e) {
+                            // Si trobem un error al convertir el codi de barres o el preu, el registrem
+                            registrarErrorEnLogs(e);
+                        }
+                    } else {
+                        // Si la linea no te el format que correcte.
+                        registrarErrorEnLogs(new IllegalArgumentException("Format de línia incorrecte: " + line));
+                    }
+                }
+            } catch (FileNotFoundException e) {
+                System.out.println("No s'ha trobat el fitxer d'actualització de preus de tèxtil.");
+            } catch (Exception e) {
+                System.out.println("S'ha produït un error en processar l'actualització de preus de tèxtil.");
+                // Registrar el error en el fitxer de logs
+                registrarErrorEnLogs(e);
+            }
+        } else {
+            System.out.println("No hi ha cap fitxer d'actualització de preus de tèxtil.");
+        }
+    }
+
+    // APARTAT: REGISTRAR LOGS D'ERROR
+    private void registrarErrorEnLogs(Exception e) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter("./src/logs/Exceptions.dat", true))) {
+            writer.println("Excepció: " + e.getMessage());
+            e.printStackTrace(writer);
+            writer.println("-------------------------------------------");
+        } catch (IOException ex) {
+            System.out.println("No s'ha pogut escriure a l'arxiu de logs.");
+            ex.printStackTrace();
         }
     }
 }

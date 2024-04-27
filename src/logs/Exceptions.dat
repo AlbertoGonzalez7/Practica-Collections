@@ -1,0 +1,24 @@
+Excepció: For input string: "25asd"
+java.lang.NumberFormatException: For input string: "25asd"
+	at java.base/jdk.internal.math.FloatingDecimal.readJavaFormatString(FloatingDecimal.java:2054)
+	at java.base/jdk.internal.math.FloatingDecimal.parseFloat(FloatingDecimal.java:122)
+	at java.base/java.lang.Float.parseFloat(Float.java:476)
+	at Supermercat.comprovarActualitzacioPreusTextils(Supermercat.java:346)
+	at Supermercat.passarPerCaixa(Supermercat.java:60)
+	at Supermercat.main(Supermercat.java:131)
+-------------------------------------------
+Excepció: For input string: "111asd"
+java.lang.NumberFormatException: For input string: "111asd"
+	at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:67)
+	at java.base/java.lang.Integer.parseInt(Integer.java:668)
+	at java.base/java.lang.Integer.parseInt(Integer.java:786)
+	at Supermercat.comprovarActualitzacioPreusTextils(Supermercat.java:345)
+	at Supermercat.passarPerCaixa(Supermercat.java:60)
+	at Supermercat.main(Supermercat.java:131)
+-------------------------------------------
+Excepció: Format de línia incorrecte: 111/25
+java.lang.IllegalArgumentException: Format de línia incorrecte: 111/25
+	at Supermercat.comprovarActualitzacioPreusTextils(Supermercat.java:359)
+	at Supermercat.passarPerCaixa(Supermercat.java:60)
+	at Supermercat.main(Supermercat.java:131)
+-------------------------------------------
