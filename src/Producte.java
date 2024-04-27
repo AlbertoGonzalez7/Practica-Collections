@@ -24,12 +24,6 @@ public abstract class Producte implements Comparable<Producte> {
         return codi_barres;
     }
 
-    // Falta modificar conforme enunciat. Simple per comprovar.
-    @Override
-    public String toString() {
-        return nom + " - Preu: " + preu + "€";
-    }
-
     @Override
     public int compareTo(Producte altreProducte) {
         // Comparem els preus dels productes

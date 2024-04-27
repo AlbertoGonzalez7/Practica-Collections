@@ -11,15 +11,14 @@ public class Textil extends Producte {
         return composicio_textil;
     }
 
+    public void setComposicioTextil(String composicioTextil) {
+        this.composicio_textil = composicioTextil;
+    }
+
     @Override
     public double calcularPreuTotal() {
         return getPreu();
     }
 
-    // Falta modificar conforme enunciat. Simple per comprovar.
-    @Override
-    public String toString() {
-        return super.toString() + " - Composició Tèxtil: " + composicio_textil;
-    }
 
 }

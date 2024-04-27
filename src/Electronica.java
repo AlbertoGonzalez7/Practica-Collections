@@ -11,17 +11,17 @@ public class Electronica extends Producte{
     public int getDiesGarantia() {
         return dies_garantia;
     }
+
+    public void setDiesGarantia(int diesGarantia) {
+        this.dies_garantia = diesGarantia;
+    }
+
     @Override
     public double calcularPreuTotal() {
         //Calculem el preu segons els dies que hi ha de garantia.
         return getPreu() + getPreu() * (dies_garantia / 365.0) * 0.1;
     }
 
-    // Falta modificar conforme enunciat. Simple per comprovar.
-    @Override
-    public String toString() {
-        return super.toString() + " - Dies garantia: " + dies_garantia;
-    }
 
     // Comparator para ordenar por días de garantía
     public static Comparator<Electronica> compararPorDiasGarantia() {

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeSet;
 import java.util.Comparator;
+import java.time.format.DateTimeFormatter;
 
 public class Supermercat {
     private TreeSet<Textil> productesTextils;
@@ -107,8 +108,13 @@ public class Supermercat {
             System.out.println("4. Buscar producte");
             System.out.println("0. Sortir");
             System.out.print("Selecciona una opció: ");
+            try {
             opcio = scanner.nextInt();
-
+            } catch (Exception e) {
+                System.out.println("Error: Introdueix un número vàlid com a opció.");
+                opcio = -1; // Assignem un valor invàlid per a repetir el bucle.
+                scanner.next(); // Netegem el buffer del scanner
+            }
             switch (opcio) {
                 case 1:
                     supermercat.menuAfegirProducte(scanner);
@@ -121,8 +127,13 @@ public class Supermercat {
                     break;
                 case 4:
                     System.out.print("Introdueix el codi del producte: ");
+                    try {
                     int codiBarresBusqueda = scanner.nextInt();
                     supermercat.buscarProductesCodiBarres(codiBarresBusqueda);
+                    } catch (Exception e) {
+                        System.out.println("Error: Introdueix un número vàlid per al codi de barres.");
+                        scanner.next(); // Netegem el buffer del scanner
+                    }
                     break;
                 case 0:
                     System.out.println("Has sortit de SAPAMERCAT. Fins la següent!");
@@ -145,8 +156,14 @@ public class Supermercat {
             System.out.println("3. Electrònica");
             System.out.println("0. Tornar");
             System.out.print("Selecciona una opció: ");
-            opcio = scanner.nextInt();
 
+            try {
+            opcio = scanner.nextInt();
+            } catch (Exception e) {
+                System.out.println("Error: Introdueix un número vàlid com a opció.");
+                opcio = -1; // Assignem un valor invàlid per a repetir el bucle.
+                scanner.next(); // Netegem el buffer del scanner
+            }
             switch (opcio) {
                 case 1:
                     afegirProducteAlimentacio(scanner);
@@ -187,9 +204,17 @@ public class Supermercat {
 
         System.out.print("Introdueix el codi de barres: ");
         int codiBarres = scanner.nextInt();
-        System.out.print("Introdueix la data de caducitat (format YYYY-MM-DD): ");
-        String dataCaducitatStr = scanner.next();
-        LocalDate dataCaducitat = LocalDate.parse(dataCaducitatStr);
+        scanner.nextLine();
+            System.out.print("Introdueix la data de caducitat (format DD/MM/YYYY): ");
+            String dataCaducitatStr = scanner.nextLine();
+            LocalDate dataCaducitat = null;
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                dataCaducitat = LocalDate.parse(dataCaducitatStr, formatter);
+            } catch (Exception e) {
+                System.out.println("Format de data no vàlid. Utilitza el format DD/MM/YYYY.");
+                return;
+            }
         System.out.print("Introdueix el nombre d'unitats: ");
         int unitats = scanner.nextInt();
         Alimentacio alimentacio = new Alimentacio(nom, preu, codiBarres, dataCaducitat);
@@ -218,15 +243,20 @@ public class Supermercat {
         scanner.nextLine();
 
         System.out.print("Introdueix el codi de barres: ");
+        try {
         int codiBarres = scanner.nextInt();
+        scanner.nextLine();
         System.out.print("Introdueix la composició tèxtil: ");
-        String composicioTextil = scanner.next();
+        String composicioTextil = scanner.nextLine();
         System.out.print("Introdueix el nombre d'unitats: ");
         int unitats = scanner.nextInt();
         Textil textil = new Textil(nom, preu, codiBarres, composicioTextil);
         afegirProducte(textil, unitats);
-
         productesTextils.add(textil);
+        } catch (Exception e) {
+            System.out.println("Error: Introdueix un número vàlid per al codi de barres.");
+            scanner.next(); // Netegem el buffer del scanner
+        }
     }
 
     // Opció Electronica, preguntem nom, preu, codi de barres, dies garantia i la quantitat.
@@ -251,6 +281,7 @@ public class Supermercat {
         scanner.nextLine();
 
         System.out.print("Introdueix el codi de barres: ");
+        try {
         int codiBarres = scanner.nextInt();
         System.out.print("Introdueix el nombre de dies de garantia: ");
         int diesGarantia = scanner.nextInt();
@@ -258,6 +289,10 @@ public class Supermercat {
         int unitats = scanner.nextInt();
         Electronica electronica = new Electronica(nom, preu, codiBarres, diesGarantia);
         afegirProducte(electronica, unitats);
+        } catch (Exception e) {
+            System.out.println("Error: Introdueix un número vàlid per al codi de barres.");
+            scanner.next(); // Netegem el buffer del scanner
+        }
     }
 
     // Buscador de productes amb stream i lambda expressions

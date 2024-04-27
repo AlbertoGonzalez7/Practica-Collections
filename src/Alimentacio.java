@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Alimentacio extends Producte{
 
@@ -9,6 +10,20 @@ public class Alimentacio extends Producte{
         this.data_caducitat = data_caducitat;
     }
 
+    public LocalDate getDataCaducitat() {
+        return data_caducitat;
+    }
+
+    public void setDataCaducitat(LocalDate dataCaducitat) {
+        this.data_caducitat = dataCaducitat;
+    }
+
+    @Override
+    public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String dataCaducitatFormatted = data_caducitat.format(formatter);
+        return super.toString() + " - Data Caducitat: " + dataCaducitatFormatted;
+    }
     @Override
     public double calcularPreuTotal() {
         // Agafem el dia que és alhora de executar el codi
@@ -18,10 +33,5 @@ public class Alimentacio extends Producte{
         // Calculem preu del producte segons els dies de caducitat que falten
         return getPreu() - getPreu() * (1.0 / diesFinsCaducitat) + (getPreu() * 0.1);
     }
-
-    // Falta modificar conforme enunciat. Simple per comprovar.
-    @Override
-    public String toString() {
-        return super.toString() + " - Caducitat: " + data_caducitat;
-    }
 }
+
