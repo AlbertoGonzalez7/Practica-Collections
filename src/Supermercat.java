@@ -104,6 +104,7 @@ public class Supermercat {
             System.out.println("1. Introduir producte");
             System.out.println("2. Passar per caixa");
             System.out.println("3. Mostrar carro de la compra");
+            System.out.println("4. Buscar producte");
             System.out.println("0. Sortir");
             System.out.print("Selecciona una opció: ");
             opcio = scanner.nextInt();
@@ -117,6 +118,11 @@ public class Supermercat {
                     break;
                 case 3:
                     supermercat.mostrarCarroCompra();
+                    break;
+                case 4:
+                    System.out.print("Introdueix el codi del producte: ");
+                    int codiBarresBusqueda = scanner.nextInt();
+                    supermercat.buscarProductesCodiBarres(codiBarresBusqueda);
                     break;
                 case 0:
                     System.out.println("Has sortit de SAPAMERCAT. Fins la següent!");
@@ -252,5 +258,18 @@ public class Supermercat {
         int unitats = scanner.nextInt();
         Electronica electronica = new Electronica(nom, preu, codiBarres, diesGarantia);
         afegirProducte(electronica, unitats);
+    }
+
+    // Buscador de productes amb stream i lambda expressions
+    public void buscarProductesCodiBarres(int codiBarres) {
+        boolean trobat = carroCompra.stream()
+                .filter(producte -> producte.getCodiBarres() == codiBarres)
+                .peek(producte -> System.out.println("Producte trobat: " + producte.getNom() + " | Quantitat: " + unitatsPerProducte.get(producte.getCodiBarres())))
+                .findAny()
+                .isPresent();
+
+        if (!trobat) {
+            System.out.println("No s'ha trobat cap producte amb el codi de barres " + codiBarres);
+        }
     }
 }
