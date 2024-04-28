@@ -1,5 +1,3 @@
-import java.time.LocalDate;
-
 public abstract class Producte implements Comparable<Producte> {
 
     String nom;

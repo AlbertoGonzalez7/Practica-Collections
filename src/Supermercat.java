@@ -1,48 +1,61 @@
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.TreeSet;
-import java.util.Comparator;
+import java.util.*;
 import java.time.format.DateTimeFormatter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Comparator;
 
 public class Supermercat {
-    private TreeSet<Textil> productesTextils;
-    private ArrayList<Producte> carroCompra;
-    private Map<Integer, Integer> unitatsPerProducte;
+    private TreeSet<Textil> productesTextils; // Per ordenar els productes textils
+    private TreeSet<Electronica> productesElectronica; // Per ordenar els productes electronics
+    private ArrayList<Producte> carroCompra; // Llista de productes al carro de la compra
+    private Map<Integer, Integer> unitatsPerProducte; // HashMap per tal de guardar la quantitat de unitats per producte
     private static final int MAX_PRODUCTES = 100; // Quantitat màxima de productes
     private static final float IVA = 0.21f; // Iva del 21%
 
     public Supermercat() {
+
+        carroCompra = new ArrayList<>();
+        unitatsPerProducte = new HashMap<>();
+
+        // Inicialització del conjunt d'objectes Textil ordenats per composició tèxtil
         productesTextils = new TreeSet<>(new Comparator<Textil>() {
             @Override
             public int compare(Textil t1, Textil t2) {
                 return t2.getComposicioTextil().compareTo(t1.getComposicioTextil());
             }
         });
-        carroCompra = new ArrayList<>();
-        unitatsPerProducte = new HashMap<>();
+
+        // Inicialització del conjunt d'objectes Electrònica ordenats per dies de garantia
+        productesElectronica = new TreeSet<>(new Comparator<Electronica>() {
+            @Override
+            public int compare(Electronica e1, Electronica e2) {
+                return Integer.compare(e1.getDiesGarantia(), e2.getDiesGarantia());
+            }
+        });
     }
 
+    // Mètode per afegir un producte al carro de la compra
     public void afegirProducte(Producte producte, int unitats) {
+        // Verifiquem que el carro no estigui ple.
         if (carroCompra.size() < MAX_PRODUCTES) {
             int codiBarres = producte.getCodiBarres();
             boolean existeix = false;
+            // Comprovem si ja hi ha un producte amb el mateix codi de barres al carro.
             for (Producte p : carroCompra) {
                 if (p.getCodiBarres() == codiBarres) {
                     existeix = true;
                 }
             }
+            // Si ja existeix el producte, mostra un missatge d'error
             if (existeix) {
                 System.out.println("Ja hi ha un producte amb el mateix codi de barres al carro.");
             } else {
-                carroCompra.add(producte); // Agregamos el producto al carro de la compra.
+                // Si no existeix, l'afegeix al carro i actualitza la quantitat d'unitats
+                carroCompra.add(producte);
                 if (unitatsPerProducte.containsKey(codiBarres)) {
                     unitatsPerProducte.put(codiBarres, unitatsPerProducte.get(codiBarres) + unitats);
                 } else {
@@ -51,12 +64,13 @@ public class Supermercat {
                 System.out.println("Producte afegit al carro de la compra.");
             }
         } else {
+            // Si el carro està ple, mostra un missatge d'error
             System.out.println("El carro de la compra està ple. No es poden afegir més productes.");
         }
     }
 
+    // Mètode per processar la compra i generar el ticket
     public void passarPerCaixa() {
-
         System.out.println("------ TICKET DE COMPRA ------");
         System.out.println("Data de la compra: " + LocalDate.now());
         System.out.println("Nom del supermercat: SAPAMERCAT");
@@ -65,6 +79,7 @@ public class Supermercat {
 
         double total = 0;
 
+        // Calcula el preu total i mostra la informació de cada producte al ticket
         for (Producte producte : carroCompra) {
             int codiBarres = producte.getCodiBarres();
             int unitats = unitatsPerProducte.get(codiBarres);
@@ -77,8 +92,8 @@ public class Supermercat {
         double totalIVA = total * IVA; // Calculem l'IVA
         double totalAPagar = total + totalIVA;
         System.out.println("------------------------------");
-        System.out.println("IVA (21%): " + String.format("%.2f", totalIVA) + "€"); //Calculem el 21% de IVA
-        System.out.println("Total a pagar: " + String.format("%.2f", totalAPagar) + "€"); //Total a pagar sumant el 21% de IVA
+        System.out.println("IVA (21%): " + String.format("%.2f", totalIVA) + "€"); // Calculem el 21% de IVA
+        System.out.println("Total a pagar: " + String.format("%.2f", totalAPagar) + "€"); // Total a pagar sumant el 21% de IVA
         System.out.println("S'ha buidat el carro.");
 
         // Buidar el carro de la compra
@@ -86,8 +101,9 @@ public class Supermercat {
         unitatsPerProducte.clear();
     }
 
+    // Mètode per mostrar el contingut del carro de la compra
     public void mostrarCarroCompra() {
-        System.out.println("------ CARRITO DE LA COMPRA ------");
+        System.out.println("------ CARRET DE LA COMPRA ------");
         for (Map.Entry<Integer, Integer> entry : unitatsPerProducte.entrySet()) {
             int codiBarres = entry.getKey();
             int unitats = entry.getValue();
@@ -106,6 +122,7 @@ public class Supermercat {
         Scanner scanner = new Scanner(System.in);
         int opcio;
 
+        // Menú principal
         do {
             System.out.println("----- MENÚ PRINCIPAL -----");
             System.out.println("1. Introduir producte");
@@ -118,7 +135,7 @@ public class Supermercat {
             opcio = scanner.nextInt();
             } catch (Exception e) {
                 System.out.println("Error: Introdueix un número vàlid com a opció.");
-                opcio = -1; // Assignem un valor invàlid per a repetir el bucle.
+                opcio = -1; // Assignem un valor invàlid per a repetir el bucle
                 scanner.next(); // Netegem el buffer del scanner
             }
             switch (opcio) {
@@ -150,6 +167,7 @@ public class Supermercat {
         } while (opcio != 0);
     }
 
+    // Mètode per mostrar el menú d'afegir producte
     private void menuAfegirProducte(Scanner scanner) {
         int opcio;
         do {
@@ -169,6 +187,7 @@ public class Supermercat {
                 System.out.println("Error: Introdueix un número vàlid com a opció.");
                 opcio = -1; // Assignem un valor invàlid per a repetir el bucle.
                 scanner.next(); // Netegem el buffer del scanner
+                registrarErrorEnLogs(new Exception("Error en el menu de productes."));
             }
             switch (opcio) {
                 case 1:
@@ -199,35 +218,66 @@ public class Supermercat {
             return;
         }
 
-        System.out.print("Introdueix el preu del producte: ");
         float preu = 0;
         boolean preuValid = false;
         while (!preuValid) {
+            System.out.print("Introdueix el preu del producte: ");
             try {
                 preu = scanner.nextFloat();
                 preuValid = true;
             } catch (Exception e) {
                 System.out.println("Introdueix un valor numèric vàlid per al preu del producte.");
                 scanner.nextLine();
+                registrarErrorEnLogs(new Exception("Preu del producte alimentació incorrecte."));
             }
         }
         scanner.nextLine();
 
-        System.out.print("Introdueix el codi de barres: ");
-        int codiBarres = scanner.nextInt();
+        int codiBarres = 0;
+        boolean codiBarresValid = false;
+        while (!codiBarresValid) {
+            System.out.print("Introdueix el codi de barres: ");
+            try {
+                codiBarres = scanner.nextInt();
+                codiBarresValid = true;
+            } catch (Exception e) {
+                System.out.println("Introdueix un valor numèric vàlid per al codi de barres.");
+                scanner.nextLine();
+                registrarErrorEnLogs(new Exception("Codi de barres del producte alimentació incorrecte."));
+            }
+        }
         scanner.nextLine();
+
+        LocalDate dataCaducitat = null;
+        boolean dataCaducitatValid = false;
+        while (!dataCaducitatValid) {
             System.out.print("Introdueix la data de caducitat (format DD/MM/YYYY): ");
             String dataCaducitatStr = scanner.nextLine();
-            LocalDate dataCaducitat = null;
             try {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 dataCaducitat = LocalDate.parse(dataCaducitatStr, formatter);
+                dataCaducitatValid = true;
             } catch (Exception e) {
                 System.out.println("Format de data no vàlid. Utilitza el format DD/MM/YYYY.");
-                return;
+                registrarErrorEnLogs(new Exception("Data caducitat del producte alimentació incorrecte."));
             }
-        System.out.print("Introdueix el nombre d'unitats: ");
-        int unitats = scanner.nextInt();
+        }
+
+        int unitats = 0;
+        boolean unitatsValid = false;
+        while (!unitatsValid) {
+            System.out.print("Introdueix el nombre d'unitats: ");
+            try {
+                unitats = scanner.nextInt();
+                unitatsValid = true;
+            } catch (Exception e) {
+                System.out.println("Introdueix un valor numèric vàlid per al nombre d'unitats.");
+                scanner.nextLine();
+                registrarErrorEnLogs(new Exception("Numero d'unitats del producte alimentació incorrecte."));
+            }
+        }
+
+        // Crea i afegeix el producte al carro de la compra
         Alimentacio alimentacio = new Alimentacio(nom, preu, codiBarres, dataCaducitat);
         afegirProducte(alimentacio, unitats);
     }
@@ -243,36 +293,59 @@ public class Supermercat {
             return;
         }
 
-        System.out.print("Introdueix el preu del producte: ");
         float preu = 0;
         boolean preuValid = false;
         while (!preuValid) {
+            System.out.print("Introdueix el preu del producte: ");
             try {
                 preu = scanner.nextFloat();
                 preuValid = true;
             } catch (Exception e) {
                 System.out.println("Introdueix un valor numèric vàlid per al preu del producte.");
                 scanner.nextLine();
+                registrarErrorEnLogs(new Exception("Preu del producte textil incorrecte."));
+            }
+        }
+        scanner.nextLine();
+
+        int codiBarres = 0;
+        boolean codiBarresValid = false;
+        while (!codiBarresValid) {
+            System.out.print("Introdueix el codi de barres: ");
+            try {
+                codiBarres = scanner.nextInt();
+                codiBarresValid = true;
+            } catch (Exception e) {
+                System.out.println("Error: Introdueix un número vàlid per al codi de barres.");
+                scanner.nextLine();
+                registrarErrorEnLogs(new Exception("Codi de barres del producte textil incorrecte."));
+            }
+        }
+        scanner.nextLine();
+
+        System.out.print("Introdueix la composició tèxtil: ");
+        String composicioTextil = scanner.nextLine();
+
+        int unitats = 0;
+        boolean unitatsValid = false;
+        while (!unitatsValid) {
+            System.out.print("Introdueix el nombre d'unitats: ");
+            try {
+                unitats = scanner.nextInt();
+                unitatsValid = true;
+            } catch (Exception e) {
+                System.out.println("Error: Introdueix un número vàlid per al nombre d'unitats.");
+                scanner.nextLine();
+                registrarErrorEnLogs(new Exception("Numero d'unitats del producte textil incorrecte."));
             }
         }
 
-        scanner.nextLine();
-
-        System.out.print("Introdueix el codi de barres: ");
-        try {
-        int codiBarres = scanner.nextInt();
-        scanner.nextLine();
-        System.out.print("Introdueix la composició tèxtil: ");
-        String composicioTextil = scanner.nextLine();
-        System.out.print("Introdueix el nombre d'unitats: ");
-        int unitats = scanner.nextInt();
+        // Crea i afegeix el producte al carro de la compra
         Textil textil = new Textil(nom, preu, codiBarres, composicioTextil);
         afegirProducte(textil, unitats);
         productesTextils.add(textil);
-        } catch (Exception e) {
-            System.out.println("Error: Introdueix un número vàlid per al codi de barres.");
-            scanner.next(); // Netegem el buffer del scanner
-        }
+
+        // Comprovem i actualitza els preus dels productes tèxtils
         comprovarActualitzacioPreusTextils();
     }
 
@@ -287,34 +360,67 @@ public class Supermercat {
             return;
         }
 
-        System.out.print("Introdueix el preu del producte: ");
         float preu = 0;
         boolean preuValid = false;
         while (!preuValid) {
+            System.out.print("Introdueix el preu del producte: ");
             try {
                 preu = scanner.nextFloat();
                 preuValid = true;
             } catch (Exception e) {
                 System.out.println("Introdueix un valor numèric vàlid per al preu del producte.");
                 scanner.nextLine();
+                registrarErrorEnLogs(new Exception("Preu del producte electronic incorrecte."));
+            }
+        }
+        scanner.nextLine();
+
+        int codiBarres = 0;
+        boolean codiBarresValid = false;
+        while (!codiBarresValid) {
+            System.out.print("Introdueix el codi de barres: ");
+            try {
+                codiBarres = scanner.nextInt();
+                codiBarresValid = true;
+            } catch (Exception e) {
+                System.out.println("Error: Introdueix un número vàlid per al codi de barres.");
+                scanner.nextLine();
+                registrarErrorEnLogs(new Exception("Codi de barres del producte electronic incorrecte."));
             }
         }
 
-        scanner.nextLine();
+        int diesGarantia = 0;
+        boolean diesGarantiaValid = false;
+        while (!diesGarantiaValid) {
+            System.out.print("Introdueix el nombre de dies de garantia: ");
+            try {
+                diesGarantia = scanner.nextInt();
+                diesGarantiaValid = true;
+            } catch (Exception e) {
+                System.out.println("Error: Introdueix un número vàlid per al nombre de dies de garantia.");
+                scanner.nextLine();
+                registrarErrorEnLogs(new Exception("Dies de garantia del producte electronic incorrecte."));
+            }
+        }
 
-        System.out.print("Introdueix el codi de barres: ");
-        try {
-        int codiBarres = scanner.nextInt();
-        System.out.print("Introdueix el nombre de dies de garantia: ");
-        int diesGarantia = scanner.nextInt();
-        System.out.print("Introdueix el nombre d'unitats: ");
-        int unitats = scanner.nextInt();
+        int unitats = 0;
+        boolean unitatsValid = false;
+        while (!unitatsValid) {
+            System.out.print("Introdueix el nombre d'unitats: ");
+            try {
+                unitats = scanner.nextInt();
+                unitatsValid = true;
+            } catch (Exception e) {
+                System.out.println("Error: Introdueix un número vàlid per al nombre d'unitats.");
+                scanner.nextLine();
+                registrarErrorEnLogs(new Exception("Numero d'unitats del producte electronic incorrecte."));
+            }
+        }
+
+        // Crea i afegeix el producte al carro de la compra
         Electronica electronica = new Electronica(nom, preu, codiBarres, diesGarantia);
         afegirProducte(electronica, unitats);
-        } catch (Exception e) {
-            System.out.println("Error: Introdueix un número vàlid per al codi de barres.");
-            scanner.next(); // Netegem el buffer del scanner
-        }
+        productesElectronica.add(electronica);
     }
 
     // Buscador de productes amb stream i lambda expressions
@@ -325,8 +431,10 @@ public class Supermercat {
                 .findAny()
                 .isPresent();
 
+        // Si no es troba, mostra un missatge d'error
         if (!trobat) {
-            System.out.println("No s'ha trobat cap producte amb el codi de barres " + codiBarres);
+            System.out.println("No s'ha trobat cap producte amb el codi de barres: " + codiBarres);
+            registrarErrorEnLogs(new Exception("Error al buscar producte per codi de barres."));
         }
     }
 

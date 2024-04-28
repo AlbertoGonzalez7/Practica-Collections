@@ -20,5 +20,4 @@ public class Textil extends Producte {
         return getPreu();
     }
 
-
 }

@@ -1,4 +1,3 @@
-import java.util.Comparator;
 public class Electronica extends Producte{
 
     int dies_garantia;
@@ -22,9 +21,4 @@ public class Electronica extends Producte{
         return getPreu() + getPreu() * (dies_garantia / 365.0) * 0.1;
     }
 
-
-    // Comparator para ordenar por días de garantía
-    public static Comparator<Electronica> compararPorDiasGarantia() {
-        return Comparator.comparingInt(Electronica::getDiesGarantia);
-    }
 }

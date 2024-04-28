@@ -22,3 +22,62 @@ java.lang.IllegalArgumentException: Format de línia incorrecte: 111/25
 	at Supermercat.passarPerCaixa(Supermercat.java:60)
 	at Supermercat.main(Supermercat.java:131)
 -------------------------------------------
+Excepció: null
+java.util.InputMismatchException
+	at java.base/java.util.Scanner.throwFor(Scanner.java:939)
+	at java.base/java.util.Scanner.next(Scanner.java:1594)
+	at java.base/java.util.Scanner.nextFloat(Scanner.java:2496)
+	at Supermercat.afegirProducteTextil(Supermercat.java:277)
+	at Supermercat.menuAfegirProducte(Supermercat.java:178)
+	at Supermercat.main(Supermercat.java:126)
+-------------------------------------------
+Excepció: null
+java.util.InputMismatchException
+	at java.base/java.util.Scanner.throwFor(Scanner.java:939)
+	at java.base/java.util.Scanner.next(Scanner.java:1594)
+	at java.base/java.util.Scanner.nextFloat(Scanner.java:2496)
+	at Supermercat.afegirProducteTextil(Supermercat.java:272)
+	at Supermercat.menuAfegirProducte(Supermercat.java:173)
+	at Supermercat.main(Supermercat.java:121)
+-------------------------------------------
+Excepció: Preu del producte incorrecte: 
+java.lang.Exception: Preu del producte incorrecte: 
+	at Supermercat.afegirProducteTextil(Supermercat.java:277)
+	at Supermercat.menuAfegirProducte(Supermercat.java:173)
+	at Supermercat.main(Supermercat.java:121)
+-------------------------------------------
+Excepció: Preu del producte textil incorrecte.
+java.lang.Exception: Preu del producte textil incorrecte.
+	at Supermercat.afegirProducteTextil(Supermercat.java:282)
+	at Supermercat.menuAfegirProducte(Supermercat.java:174)
+	at Supermercat.main(Supermercat.java:121)
+-------------------------------------------
+Excepció: Codi de barres del producte textil incorrecte.
+java.lang.Exception: Codi de barres del producte textil incorrecte.
+	at Supermercat.afegirProducteTextil(Supermercat.java:297)
+	at Supermercat.menuAfegirProducte(Supermercat.java:174)
+	at Supermercat.main(Supermercat.java:121)
+-------------------------------------------
+Excepció: Numero d'unitats del producte textil incorrecte.
+java.lang.Exception: Numero d'unitats del producte textil incorrecte.
+	at Supermercat.afegirProducteTextil(Supermercat.java:315)
+	at Supermercat.menuAfegirProducte(Supermercat.java:174)
+	at Supermercat.main(Supermercat.java:121)
+-------------------------------------------
+Excepció: Error al buscar producte per codi de barres.
+java.lang.Exception: Error al buscar producte per codi de barres.
+	at Supermercat.buscarProductesCodiBarres(Supermercat.java:408)
+	at Supermercat.main(Supermercat.java:133)
+-------------------------------------------
+Excepció: Preu del producte textil incorrecte.
+java.lang.Exception: Preu del producte textil incorrecte.
+	at Supermercat.afegirProducteTextil(Supermercat.java:282)
+	at Supermercat.menuAfegirProducte(Supermercat.java:174)
+	at Supermercat.main(Supermercat.java:121)
+-------------------------------------------
+Excepció: Preu del producte alimentació incorrecte.
+java.lang.Exception: Preu del producte alimentació incorrecte.
+	at Supermercat.afegirProducteAlimentacio(Supermercat.java:231)
+	at Supermercat.menuAfegirProducte(Supermercat.java:194)
+	at Supermercat.main(Supermercat.java:143)
+-------------------------------------------
